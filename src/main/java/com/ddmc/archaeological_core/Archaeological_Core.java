@@ -1,9 +1,11 @@
 package com.ddmc.archaeological_core;
 
+import com.ddmc.archaeological_core.register.ModBlockEntities;
+import com.ddmc.archaeological_core.register.ModBlocks;
+import com.ddmc.archaeological_core.register.ModItems;
+import net.minecraft.world.item.CreativeModeTabs;
 import org.slf4j.Logger;
-
 import com.mojang.logging.LogUtils;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Blocks;
@@ -31,6 +33,10 @@ public class Archaeological_Core {
         modEventBus.addListener(this::commonSetup);
         NeoForge.EVENT_BUS.register(this);
 
+        ModItems.register(modEventBus);
+        ModBlocks.register(modEventBus);
+        ModBlockEntities.register(modEventBus);
+
         modEventBus.addListener(this::addCreative);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
@@ -49,7 +55,11 @@ public class Archaeological_Core {
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-
+        if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+            event.accept(ModItems.TEST_BRUSH.get());
+            event.accept(ModBlocks.TEST_BLOCK_1.get());
+            event.accept(ModBlocks.TEST_BLOCK_2.get());
+        }
     }
 
     // You can use SubscribeEvent and let the Event Bus discover methods to call
